@@ -111,30 +111,26 @@
 <body>
     <div class="panel">
         <div class="header">
-            <div>Target<br>Distance<br>1433 m</div>
-            <div class="large-number">...</div>
-            <div id="currentDate"></div>
-            <div id="currentTime"></div>
-            <div>Movement Authority</div>
+            <div>Turn Out<br>Target<br>Distance</div>
+            <div class="large-number">999999</div>
+            <div>16-Jan-2018<br>14:08:57</div>
+            <div>Move Authority<br>...</div>
+        </div>
+        <div class="indicator indicator-left">
+            <div style="position: absolute; left: 40px; top: 50px;">1433 m</div>
         </div>
         <div class="gauge-container">
             <svg class="gauge" viewBox="0 0 200 200">
-                <!-- Green arc starting at the bottommost point -->
-                <path d="M100,190 A90,90 0 0,1 100,10" fill="none" stroke="#0f0" stroke-width="10"/>
-                <!-- Outer circle -->
+                <path d="M10,100 A90,90 0 0,1 190,100" fill="none" stroke="#0f0" stroke-width="10"/>
                 <circle cx="100" cy="100" r="90" fill="none" stroke="#444" stroke-width="2"/>
-                <!-- Needle -->
                 <path d="M100,100 L100,20" stroke="white" stroke-width="2" transform="rotate(56, 100, 100)" />
-                <!-- Center circle -->
                 <circle cx="100" cy="100" r="15" fill="white" />
-                <!-- Value text -->
                 <text x="100" y="105" text-anchor="middle" fill="black" font-size="16">56</text>
-                <!-- Scale labels -->
                 <text x="10" y="110" fill="white" font-size="10">0</text>
                 <text x="100" y="30" fill="white" font-size="10">120</text>
                 <text x="190" y="110" fill="white" font-size="10">240</text>
             </svg>
-            <div style="position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);"><br><br>
+            <div style="position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);">
                 LOC : 61.84 Km
             </div>
         </div>
@@ -187,26 +183,5 @@
             <div class="button">INFO</div>
         </div>
     </div>
-
-    <script>
-        function updateDateTime() {
-            const now = new Date();
-            
-            // Format date as DD-MMM-YYYY
-            const dateOptions = { day: '2-digit', month: 'short', year: 'numeric' };
-            const formattedDate = now.toLocaleDateString('en-GB', dateOptions).replace(/ /g, '-');
-            
-            // Format time as HH:MM:SS
-            const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
-            const formattedTime = now.toLocaleTimeString('en-GB', timeOptions);
-            
-            document.getElementById('currentDate').textContent = formattedDate;
-            document.getElementById('currentTime').textContent = formattedTime;
-        }
-
-        // Update date and time immediately and then every second
-        updateDateTime();
-        setInterval(updateDateTime, 1000);
-    </script>
 </body>
 </html>
