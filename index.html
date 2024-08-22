@@ -113,7 +113,8 @@
         <div class="header">
             <div>Turn Out<br>Target<br>Distance</div>
             <div class="large-number">999999</div>
-            <div>16-Jan-2018<br>14:08:57</div>
+                <div id="currentDate"></div>
+                <div id="currentTime"></div>
             <div>Move Authority<br>...</div>
         </div>
         <div class="indicator indicator-left">
@@ -183,5 +184,25 @@
             <div class="button">INFO</div>
         </div>
     </div>
+    <script>
+        function updateDateTime() {
+            const now = new Date();
+            
+            // Format date as DD-MMM-YYYY
+            const dateOptions = { day: '2-digit', month: 'short', year: 'numeric' };
+            const formattedDate = now.toLocaleDateString('en-GB', dateOptions).replace(/ /g, '-');
+            
+            // Format time as HH:MM:SS
+            const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+            const formattedTime = now.toLocaleTimeString('en-GB', timeOptions);
+            
+            document.getElementById('currentDate').textContent = formattedDate;
+            document.getElementById('currentTime').textContent = formattedTime;
+        }
+
+        // Update date and time immediately and then every second
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
+    </script>
 </body>
 </html>
