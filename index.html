@@ -121,16 +121,22 @@
             <div style="position: absolute; left: 40px; top: 50px;">CoE-KAVACH</div>
         </div>
         <div class="gauge-container">
-            <svg class="gauge" viewBox="0 0 200 200">
-                <path d="M10,100 A90,90 0 0,1 190,100" fill="none" stroke="#0f0" stroke-width="10"/>
-                <circle cx="100" cy="100" r="90" fill="none" stroke="#444" stroke-width="2"/>
-                <path d="M100,100 L100,20" stroke="white" stroke-width="2" transform="rotate(56, 100, 100)" />
-                <circle cx="100" cy="100" r="15" fill="white" />
-                <text x="100" y="105" text-anchor="middle" fill="black" font-size="16">56</text>
-                <text x="10" y="110" fill="white" font-size="10">0</text>
-                <text x="100" y="30" fill="white" font-size="10">120</text>
-                <text x="190" y="110" fill="white" font-size="10">240</text>
-            </svg>
+        <svg class="gauge" viewBox="0 0 200 200">
+            <!-- Green arc starting at the bottommost point -->
+            <path d="M100,190 A90,90 0 0,1 100,10" fill="none" stroke="#0f0" stroke-width="10"/>
+            <!-- Outer circle -->
+            <circle cx="100" cy="100" r="90" fill="none" stroke="#444" stroke-width="2"/>
+            <!-- Needle -->
+            <path d="M100,100 L100,20" stroke="white" stroke-width="2" transform="rotate(56, 100, 100)" />
+            <!-- Center circle -->
+            <circle cx="100" cy="100" r="15" fill="white" />
+            <!-- Value text -->
+            <text x="100" y="105" text-anchor="middle" fill="black" font-size="16">56</text>
+            <!-- Scale labels -->
+            <text x="10" y="110" fill="white" font-size="10">0</text>
+            <text x="100" y="30" fill="white" font-size="10">120</text>
+            <text x="190" y="110" fill="white" font-size="10">240</text>
+        </svg>
             <div style="position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);">
                 LOC : 61.84 Km
             </div>
