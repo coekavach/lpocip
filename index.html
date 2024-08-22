@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Train Control Panel</title>
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .panel {
+            width: 800px;
+            height: 600px;
+            border: 2px solid #444;
+            padding: 10px;
+            display: grid;
+            grid-template-columns: 80px 1fr 80px 100px;
+            grid-template-rows: auto 1fr auto auto auto;
+            gap: 10px;
+            background-color: #111;
+        }
+        .header {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            align-items: flex-start;
+        }
+        .large-number {
+            font-size: 36px;
+            font-weight: bold;
+        }
+        .gauge-container {
+            grid-column: 2;
+            grid-row: 2 / 4;
+            position: relative;
+        }
+        .gauge {
+            width: 100%;
+            height: 100%;
+        }
+        .indicator {
+            width: 30px;
+            height: 200px;
+            background-color: #333;
+            margin: 10px 0;
+        }
+        .indicator-left { grid-column: 1; grid-row: 2 / 4; background: linear-gradient(to top, #f90, #f90 70%, #333 70%); }
+        .indicator-right { grid-column: 3; grid-row: 2 / 4; background: linear-gradient(to top, #09f, #09f 80%, #333 80%); }
+        .signal {
+            grid-column: 4;
+            grid-row: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .signal-light {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            margin: 5px 0;
+        }
+        .yellow { background-color: yellow; }
+        .white { background-color: white; }
+        .info-box {
+            grid-column: 4;
+            grid-row: 3;
+            font-size: 12px;
+            text-align: center;
+        }
+        .status-bar {
+            grid-column: 1 / 4;
+            grid-row: 4;
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            background-color: #222;
+            padding: 5px;
+        }
+        .rf-indicator, .tag-indicator {
+            grid-column: 4;
+            grid-row: 4;
+            font-size: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .button-panel {
+            grid-column: 1 / -1;
+            grid-row: 5;
+            display: flex;
+            justify-content: space-between;
+        }
+        .button {
+            background-color: #444;
+            border: 1px solid #666;
+            color: white;
+            padding: 5px 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="panel">
+        <div class="header">
+            <div>Turn Out<br>Target<br>Distance</div>
+            <div class="large-number">999999</div>
+            <div>16-Jan-2018<br>14:08:57</div>
+            <div>Move Authority<br>...</div>
+        </div>
+        <div class="indicator indicator-left">
+            <div style="position: absolute; left: 40px; top: 50px;">1433 m</div>
+        </div>
+        <div class="gauge-container">
+            <svg class="gauge" viewBox="0 0 200 200">
+                <path d="M10,100 A90,90 0 0,1 190,100" fill="none" stroke="#0f0" stroke-width="10"/>
+                <circle cx="100" cy="100" r="90" fill="none" stroke="#444" stroke-width="2"/>
+                <path d="M100,100 L100,20" stroke="white" stroke-width="2" transform="rotate(56, 100, 100)" />
+                <circle cx="100" cy="100" r="15" fill="white" />
+                <text x="100" y="105" text-anchor="middle" fill="black" font-size="16">56</text>
+                <text x="10" y="110" fill="white" font-size="10">0</text>
+                <text x="100" y="30" fill="white" font-size="10">120</text>
+                <text x="190" y="110" fill="white" font-size="10">240</text>
+            </svg>
+            <div style="position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);">
+                LOC : 61.84 Km
+            </div>
+        </div>
+        <div class="indicator indicator-right">
+            <div style="position: absolute; right: 120px; top: 50px;">02363 m</div>
+        </div>
+        <div class="signal">
+            <div class="signal-light"></div>
+            <div class="signal-light"></div>
+            <div class="signal-light yellow"></div>
+            <div class="signal-light"></div>
+            <div class="signal-light white"></div>
+        </div>
+        <div class="info-box">
+            0933 m
+            <div style="color: orange;">Up Home-L4</div>
+        </div>
+        <div class="status-bar">
+            <span>DC 0.35</span>
+            <span>TL 550 mts</span>
+            <span>Full Supervision</span>
+        </div>
+        <div class="rf-indicator">
+            RF
+            <div style="display: flex; align-items: center;">
+                <span>▼</span>
+                <span style="display: inline-block; width: 50px; height: 10px; background: white;"></span>
+            </div>
+            <div>Tid-245,Dir-N</div>
+            <div>T Dist-532</div>
+        </div>
+        <div class="tag-indicator">
+            Tag
+            <div style="width: 20px; height: 60px; background: #333; display: flex; flex-direction: column; justify-content: flex-end;">
+                <div style="height: 33%; background: red;"></div>
+                <div style="height: 33%; background: green;"></div>
+                <div style="height: 33%; background: green;"></div>
+            </div>
+        </div>
+        <div class="button-panel">
+            <div class="button">P_TRP</div>
+            <div class="button">REV</div>
+            <div class="button">OVRD</div>
+            <div class="button">SHNT</div>
+            <div class="button">MBT</div>
+            <div class="button">SR</div>
+            <div class="button">CONFIG</div>
+            <div class="button" style="visibility: hidden;"></div>
+            <div class="button">CNFM</div>
+            <div class="button">INFO</div>
+        </div>
+    </div>
+</body>
+</html>
