@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Train Control Panel</title>
     <style>
+        /* General body styling for centering content */
         body {
             background-color: #000;
             color: #fff;
@@ -15,6 +16,8 @@
             height: 100vh;
             margin: 0;
         }
+
+        /* Main control panel styling */
         .panel {
             width: 800px;
             height: 600px;
@@ -26,6 +29,8 @@
             gap: 10px;
             background-color: #111;
         }
+
+        /* Header section: displays the target distance, current date & time, and move authority */
         .header {
             grid-column: 1 / -1;
             display: flex;
@@ -33,27 +38,43 @@
             font-size: 14px;
             align-items: flex-start;
         }
+
+        /* Large number in the header (currently empty) */
         .large-number {
             font-size: 36px;
             font-weight: bold;
         }
+
+        /* Container for the main gauge */
         .gauge-container {
             grid-column: 2;
             grid-row: 2 / 4;
             position: relative;
         }
-        .gauge {
-            width: 100%;
-            height: 100%;
-        }
+
+        /* Styling for the indicator bars on the left and right of the panel */
         .indicator {
             width: 30px;
             height: 200px;
             background-color: #333;
             margin: 10px 0;
         }
-        .indicator-left { grid-column: 1; grid-row: 2 / 4; background: linear-gradient(to top, #f90, #f90 70%, #333 70%); }
-        .indicator-right { grid-column: 3; grid-row: 2 / 4; background: linear-gradient(to top, #09f, #09f 80%, #333 80%); }
+
+        /* Left indicator bar with a gradient */
+        .indicator-left { 
+            grid-column: 1; 
+            grid-row: 2 / 4; 
+            background: linear-gradient(to top, #f90, #f90 70%, #333 70%);
+        }
+
+        /* Right indicator bar with a gradient */
+        .indicator-right { 
+            grid-column: 3; 
+            grid-row: 2 / 4; 
+            background: linear-gradient(to top, #09f, #09f 80%, #333 80%); 
+        }
+
+        /* Signal section on the right with light indicators */
         .signal {
             grid-column: 4;
             grid-row: 2;
@@ -61,6 +82,8 @@
             flex-direction: column;
             align-items: center;
         }
+
+        /* Individual signal light styling */
         .signal-light {
             width: 40px;
             height: 40px;
@@ -68,14 +91,20 @@
             border-radius: 50%;
             margin: 5px 0;
         }
+
+        /* Specific signal light colors */
         .yellow { background-color: yellow; }
         .white { background-color: white; }
+
+        /* Info box below the signal lights */
         .info-box {
             grid-column: 4;
             grid-row: 3;
             font-size: 12px;
             text-align: center;
         }
+
+        /* Status bar below the gauge */
         .status-bar {
             grid-column: 1 / 4;
             grid-row: 4;
@@ -85,6 +114,8 @@
             background-color: #222;
             padding: 5px;
         }
+
+        /* RF indicator section */
         .rf-indicator, .tag-indicator {
             grid-column: 4;
             grid-row: 4;
@@ -93,12 +124,16 @@
             flex-direction: column;
             align-items: center;
         }
+
+        /* Button panel at the bottom of the control panel */
         .button-panel {
             grid-column: 1 / -1;
             grid-row: 5;
             display: flex;
             justify-content: space-between;
         }
+
+        /* Individual button styling */
         .button {
             background-color: #444;
             border: 1px solid #666;
@@ -110,40 +145,49 @@
 </head>
 <body>
     <div class="panel">
+        <!-- Header section displaying target distance, move authority, and current date/time -->
         <div class="header">
             <div>Target<br>Distance<br>1433 m</div>
-            <div class="large-number"> </div>
-                <div id="currentDate"></div>
-                <div id="currentTime"></div>
+            <div class="large-number"></div>
+            <div id="currentDate"></div>
+            <div id="currentTime"></div>
             <div>Move Authority<br>02363 m</div>
         </div>
+
+        <!-- Left indicator with gradient color -->
         <div class="indicator indicator-left">
             <div style="position: absolute; left: 40px; top: 50px;">CoE-KAVACH</div>
         </div>
+
+        <!-- Main gauge displaying speed and other information -->
         <div class="gauge-container">
-        <svg class="gauge" viewBox="0 0 200 200">
-            <!-- Green arc starting at the bottommost point -->
-            <path d="M100,190 A90,90 0 0,1 100,10" fill="none" stroke="#0f0" stroke-width="10"/>
-            <!-- Outer circle -->
-            <circle cx="100" cy="100" r="90" fill="none" stroke="#444" stroke-width="2"/>
-            <!-- Needle -->
-            <path d="M100,100 L100,20" stroke="white" stroke-width="2" transform="rotate(56, 100, 100)" />
-            <!-- Center circle -->
-            <circle cx="100" cy="100" r="15" fill="white" />
-            <!-- Value text -->
-            <text x="100" y="105" text-anchor="middle" fill="black" font-size="16">56</text>
-            <!-- Scale labels -->
-            <text x="15" y="110" fill="white" font-size="10">90</text>
-            <text x="100" y="30" fill="white" font-size="10">120</text>
-            <text x="190" y="110" fill="white" font-size="10">240</text>
-        </svg>
+            <svg class="gauge" viewBox="0 0 200 200">
+                <!-- Green arc starting at the bottommost point -->
+                <path d="M100,190 A90,90 0 0,1 100,10" fill="none" stroke="#0f0" stroke-width="10"/>
+                <!-- Outer circle -->
+                <circle cx="100" cy="100" r="90" fill="none" stroke="#444" stroke-width="2"/>
+                <!-- Needle indicating current speed -->
+                <path d="M100,100 L100,20" stroke="white" stroke-width="2" transform="rotate(56, 100, 100)" />
+                <!-- Center circle -->
+                <circle cx="100" cy="100" r="15" fill="white" />
+                <!-- Displayed speed value -->
+                <text x="100" y="105" text-anchor="middle" fill="black" font-size="16">56</text>
+                <!-- Scale labels around the gauge -->
+                <text x="15" y="110" fill="white" font-size="10">90</text>
+                <text x="100" y="30" fill="white" font-size="10">120</text>
+                <text x="190" y="110" fill="white" font-size="10">240</text>
+            </svg>
             <div style="position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);">
                 LOC : 61.84 Km
             </div>
         </div>
+
+        <!-- Right indicator with gradient color -->
         <div class="indicator indicator-right">
             <div style="position: absolute; right: 120px; top: 50px;">LP-OCIP SIMULATOR</div>
         </div>
+
+        <!-- Signal lights indicating different states -->
         <div class="signal">
             <div class="signal-light"></div>
             <div class="signal-light"></div>
@@ -151,15 +195,21 @@
             <div class="signal-light"></div>
             <div class="signal-light white"></div>
         </div>
+
+        <!-- Info box displaying additional information -->
         <div class="info-box">
             0933 m
             <div style="color: orange;">Up Home-L4</div>
         </div>
+
+        <!-- Status bar displaying various status indicators -->
         <div class="status-bar">
             <span>DC 0.35</span>
             <span>TL 550 mts</span>
             <span>Full Supervision</span>
         </div>
+
+        <!-- RF (Radio Frequency) indicator section -->
         <div class="rf-indicator">
             RF
             <div style="display: flex; align-items: center;">
@@ -169,6 +219,8 @@
             <div>Tid-245,Dir-N</div>
             <div>T Dist-532</div>
         </div>
+
+        <!-- Tag indicator section -->
         <div class="tag-indicator">
             Tag
             <div style="width: 20px; height: 60px; background: #333; display: flex; flex-direction: column; justify-content: flex-end;">
@@ -177,6 +229,8 @@
                 <div style="height: 33%; background: green;"></div>
             </div>
         </div>
+
+        <!-- Button panel with various control buttons -->
         <div class="button-panel">
             <div class="button">P_TRP</div>
             <div class="button">REV</div>
@@ -190,6 +244,8 @@
             <div class="button">INFO</div>
         </div>
     </div>
+
+    <!-- JavaScript to update date and time dynamically -->
     <script>
         function updateDateTime() {
             const now = new Date();
