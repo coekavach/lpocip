@@ -106,6 +106,15 @@
             padding: 5px 10px;
             text-align: center;
         }
+        dialog {
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        dialog::backdrop {
+            background-color: rgba(0,0,0,0.5);
+        }
     </style>
 </head>
 <body>
@@ -189,6 +198,10 @@
             <div class="button">CNFM</div>
             <div class="button">INFO</div>
         </div>
+        <dialog id="dialogBox">
+        <p id="dialogText"></p>
+        <button id="closeDialog">Close</button>
+    </dialog>
     </div>
     <script>
         function updateDateTime() {
@@ -209,6 +222,28 @@
         // Update date and time immediately and then every second
         updateDateTime();
         setInterval(updateDateTime, 1000);
+
+        const buttons = document.querySelectorAll('.button');
+        const dialog = document.getElementById('dialogBox');
+        const dialogText = document.getElementById('dialogText');
+        const closeButton = document.getElementById('closeDialog');
+
+        // Ensure the dialog works on browsers that don't support <dialog>
+        dialogPolyfill.registerDialog(dialog);
+
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                const text = button.getAttribute('data-text');
+                if (text) {
+                    dialogText.textContent = `You clicked: ${text}`;
+                    dialog.showModal();
+                }
+            });
+        });
+
+        closeButton.addEventListener('click', () => {
+            dialog.close();
+        });
     </script>
 </body>
 </html>
