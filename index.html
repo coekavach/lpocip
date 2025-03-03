@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Full Page iFrame</title>
+  <title>DMI CoE Kavach</title>
   <style>
     /* Remove default margins and ensure full height */
     html, body {
@@ -23,10 +23,19 @@
 </head>
 <body>
   <iframe 
+    id="presentationFrame"
     src="https://docs.google.com/presentation/d/e/2PACX-1vTFD0udq5cOvr1eAkXphCxk9avOWfDSOpWEEN_qpUWVf8OjCJ_bhvlG62uipH_caFGqv1jDeZvPcfW5/embed?start=true&loop=true&delayms=1000" 
     allowfullscreen="true" 
     mozallowfullscreen="true" 
     webkitallowfullscreen="true">
   </iframe>
+  <script>
+    // Reload the iframe every 5 seconds
+    setInterval(function() {
+      var iframe = document.getElementById("presentationFrame");
+      iframe.src = iframe.src;
+    }, 5000);
+  </script>
 </body>
 </html>
+
