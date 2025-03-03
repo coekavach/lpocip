@@ -12,25 +12,93 @@
       height: 100%;
       overflow: hidden;
       background-color: #000;
+      font-family: 'Arial', sans-serif;
     }
-    /* Make the iframe fill the whole page */
+    
+    /* Side panel styling */
+    .side-panel {
+      position: fixed;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 70px;
+      background-color: rgba(30, 30, 30, 0.9);
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 20px;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5);
+    }
+    
+    .panel-button {
+      width: 55px;
+      height: 55px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      background-color: rgba(50, 50, 50, 0.8);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 5px;
+      font-size: 12px;
+    }
+    
+    .panel-button:hover {
+      background-color: rgba(70, 70, 70, 0.9);
+      border-color: rgba(255, 255, 255, 0.5);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    }
+    
+    .panel-button:active {
+      transform: translateY(1px);
+      box-shadow: 0 1px 5px rgba(0, 0, 0, 0.6);
+    }
+    
+    .panel-button.active {
+      background-color: rgba(80, 120, 255, 0.8);
+      border-color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .panel-button-icon {
+      width: 24px;
+      height: 24px;
+      margin-bottom: 4px;
+    }
+    
+    /* Content container */
+    .content-container {
+      position: absolute;
+      top: 0;
+      left: 70px;
+      right: 0;
+      bottom: 0;
+      z-index: 1;
+    }
+    
+    /* Make the iframes fill the content area */
     iframe {
       width: 100%;
       height: 100%;
       border: none;
       display: block;
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 1;
     }
+    
     /* Style for the update button */
     .button-container {
       position: fixed;
       top: 15px;
-      left: 15px;
+      left: 85px;
       z-index: 1000;
     }
+    
     .update-button {
       padding: 8px 16px;
       background-color: rgba(30, 30, 30, 0.8);
@@ -47,16 +115,19 @@
       align-items: center;
       gap: 6px;
     }
+    
     .update-button:hover {
       background-color: rgba(50, 50, 50, 0.9);
       border-color: rgba(255, 255, 255, 0.5);
       transform: translateY(-1px);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
     }
+    
     .update-button:active {
       transform: translateY(1px);
       box-shadow: 0 1px 5px rgba(0, 0, 0, 0.6);
     }
+    
     /* Refresh icon */
     .refresh-icon {
       width: 14px;
@@ -65,46 +136,125 @@
       stroke-width: 2;
       fill: none;
     }
+    
     /* Add animation for visual feedback */
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
+    
     .spinning {
       animation: spin 1s linear infinite;
+    }
+    
+    /* Content visibility control */
+    .content-section {
+      width: 100%;
+      height: 100%;
+      display: none;
+    }
+    
+    .content-section.active {
+      display: block;
     }
   </style>
 </head>
 <body>
-  <iframe 
-    id="presentationFrame"
-    src="https://docs.google.com/presentation/d/e/2PACX-1vTFD0udq5cOvr1eAkXphCxk9avOWfDSOpWEEN_qpUWVf8OjCJ_bhvlG62uipH_caFGqv1jDeZvPcfW5/embed?start=true&loop=true&delayms=1000&rm=minimal" 
-    allowfullscreen="true" 
-    mozallowfullscreen="true" 
-    webkitallowfullscreen="true">
-  </iframe>
-  
-  <div class="button-container">
-    <button id="updateButton" class="update-button">
-      <svg class="refresh-icon" id="refreshIcon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="M23 4v6h-6M1 20v-6h6"></path>
-        <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"></path>
+  <!-- Side Panel -->
+  <div class="side-panel">
+    <button id="dmiButton" class="panel-button active" title="DMI">
+      <svg class="panel-button-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" stroke="white" stroke-width="2" fill="none"></path>
+        <polyline points="9 22 9 12 15 12 15 22" stroke="white" stroke-width="2" fill="none"></polyline>
       </svg>
-      <span id="buttonText">Update</span>
+      DMI
+    </button>
+    <button id="configureButton" class="panel-button" title="Configure">
+      <svg class="panel-button-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 15a3 3 0 100-6 3 3 0 000 6z" stroke="white" stroke-width="2" fill="none"></path>
+        <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z" stroke="white" stroke-width="2" fill="none"></path>
+      </svg>
+      Configure
     </button>
   </div>
   
+  <!-- Content Container -->
+  <div class="content-container">
+    <!-- DMI Content Section -->
+    <div id="dmiContent" class="content-section active">
+      <iframe 
+        id="presentationFrame"
+        src="https://docs.google.com/presentation/d/e/2PACX-1vTFD0udq5cOvr1eAkXphCxk9avOWfDSOpWEEN_qpUWVf8OjCJ_bhvlG62uipH_caFGqv1jDeZvPcfW5/embed?start=true&loop=true&delayms=1000&rm=minimal" 
+        allowfullscreen="true" 
+        mozallowfullscreen="true" 
+        webkitallowfullscreen="true">
+      </iframe>
+      
+      <div class="button-container">
+        <button id="updateButton" class="update-button">
+          <svg class="refresh-icon" id="refreshIcon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M23 4v6h-6M1 20v-6h6"></path>
+            <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"></path>
+          </svg>
+          <span id="buttonText">Update</span>
+        </button>
+      </div>
+    </div>
+    
+    <!-- Configure Content Section -->
+    <div id="configureContent" class="content-section">
+      <iframe 
+        id="configureFrame"
+        src="https://script.google.com/macros/s/AKfycbz1y-fr-2s_cxUg4t4E7aU2TzQPrVsvNBtUFkVBEgMwrdy2ZOZe3rld6dCN8jlTKH7s/exec" 
+        allowfullscreen="true" 
+        mozallowfullscreen="true" 
+        webkitallowfullscreen="true">
+      </iframe>
+    </div>
+  </div>
+  
   <script>
-    // Get reference to the button, icon, text span, and iframe
+    // Get reference to buttons and content sections
+    const dmiButton = document.getElementById("dmiButton");
+    const configureButton = document.getElementById("configureButton");
+    const dmiContent = document.getElementById("dmiContent");
+    const configureContent = document.getElementById("configureContent");
+    
+    // Get reference to the update button, icon, text span, and iframe
     const updateButton = document.getElementById("updateButton");
     const refreshIcon = document.getElementById("refreshIcon");
     const buttonText = document.getElementById("buttonText");
-    const iframe = document.getElementById("presentationFrame");
+    const presentationFrame = document.getElementById("presentationFrame");
     
-    // Add click event listener to the button
+    // Function to set active content
+    function setActiveContent(contentId) {
+      // Hide all content sections and deactivate all buttons
+      document.querySelectorAll('.content-section').forEach(section => {
+        section.classList.remove('active');
+      });
+      
+      document.querySelectorAll('.panel-button').forEach(button => {
+        button.classList.remove('active');
+      });
+      
+      // Show selected content and activate corresponding button
+      document.getElementById(contentId + 'Content').classList.add('active');
+      document.getElementById(contentId + 'Button').classList.add('active');
+    }
+    
+    // Add click event listeners to side panel buttons
+    dmiButton.addEventListener("click", function() {
+      setActiveContent('dmi');
+    });
+    
+    configureButton.addEventListener("click", function() {
+      setActiveContent('configure');
+    });
+    
+    // Add click event listener to the update button
     updateButton.addEventListener("click", function() {
       // Reload the iframe by resetting its src attribute
-      iframe.src = iframe.src;
+      presentationFrame.src = presentationFrame.src;
       
       // Add visual feedback when button is clicked
       refreshIcon.classList.add("spinning");
@@ -113,7 +263,7 @@
       // Reset button after a short delay
       setTimeout(function() {
         refreshIcon.classList.remove("spinning");
-        buttonText.textContent = "Refresh";
+        buttonText.textContent = "Update";
       }, 1500);
     });
   </script>
