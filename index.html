@@ -11,42 +11,67 @@
       padding: 0;
       height: 100%;
       overflow: hidden;
+      background-color: #000;
     }
-    /* Make the iframe fill most of the page */
+    /* Make the iframe fill the whole page */
     iframe {
       width: 100%;
-      height: calc(100% - 50px);
+      height: 100%;
       border: none;
       display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
     }
     /* Style for the update button */
     .button-container {
       position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 50px;
-      background-color: #f1f1f1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      top: 15px;
+      left: 15px;
       z-index: 1000;
     }
     .update-button {
-      padding: 10px 20px;
-      background-color: #4285f4;
-      color: white;
-      border: none;
+      padding: 8px 16px;
+      background-color: rgba(30, 30, 30, 0.8);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.3);
       border-radius: 4px;
-      font-size: 16px;
+      font-size: 14px;
+      font-family: 'Arial', sans-serif;
       cursor: pointer;
-      transition: background-color 0.3s;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(4px);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
     .update-button:hover {
-      background-color: #3367d6;
+      background-color: rgba(50, 50, 50, 0.9);
+      border-color: rgba(255, 255, 255, 0.5);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
     }
     .update-button:active {
-      background-color: #2a56c6;
+      transform: translateY(1px);
+      box-shadow: 0 1px 5px rgba(0, 0, 0, 0.6);
+    }
+    /* Refresh icon */
+    .refresh-icon {
+      width: 14px;
+      height: 14px;
+      stroke: white;
+      stroke-width: 2;
+      fill: none;
+    }
+    /* Add animation for visual feedback */
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .spinning {
+      animation: spin 1s linear infinite;
     }
   </style>
 </head>
@@ -60,12 +85,20 @@
   </iframe>
   
   <div class="button-container">
-    <button id="updateButton" class="update-button">Update</button>
+    <button id="updateButton" class="update-button">
+      <svg class="refresh-icon" id="refreshIcon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M23 4v6h-6M1 20v-6h6"></path>
+        <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"></path>
+      </svg>
+      <span id="buttonText">Refresh</span>
+    </button>
   </div>
   
   <script>
-    // Get reference to the button and iframe
+    // Get reference to the button, icon, text span, and iframe
     const updateButton = document.getElementById("updateButton");
+    const refreshIcon = document.getElementById("refreshIcon");
+    const buttonText = document.getElementById("buttonText");
     const iframe = document.getElementById("presentationFrame");
     
     // Add click event listener to the button
@@ -73,11 +106,15 @@
       // Reload the iframe by resetting its src attribute
       iframe.src = iframe.src;
       
-      // Optional: Add visual feedback when button is clicked
-      updateButton.textContent = "Updating...";
+      // Add visual feedback when button is clicked
+      refreshIcon.classList.add("spinning");
+      buttonText.textContent = "Refreshing...";
+      
+      // Reset button after a short delay
       setTimeout(function() {
-        updateButton.textContent = "Update Presentation";
-      }, 1000);
+        refreshIcon.classList.remove("spinning");
+        buttonText.textContent = "Refresh";
+      }, 1500);
     });
   </script>
 </body>
