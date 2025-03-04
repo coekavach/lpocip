@@ -10,77 +10,71 @@
       margin: 0;
       padding: 0;
       height: 100%;
-      overflow: hidden;
       background-color: #000;
       font-family: 'Arial', sans-serif;
+      overflow: hidden;
     }
     
-    /* Side panel styling */
-    .side-panel {
-      position: fixed;
-      left: 0;
-      top: 0;
+    /* Main container for all content */
+    .main-container {
+      display: flex;
+      height: 100vh;
+      width: 100%;
+    }
+    
+    /* Styling for the two panels */
+    .panel {
+      position: relative;
       height: 100%;
-      width: 70px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      transition: width 0.3s ease;
+    }
+    
+    /* Left panel (DMI) */
+    .dmi-panel {
+      width: 50%;
+      border-right: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    /* Right panel (Configure) */
+    .configure-panel {
+      width: 50%;
+      border-left: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    /* Panel headers */
+    .panel-header {
+      height: 50px;
       background-color: rgba(30, 30, 30, 0.9);
-      z-index: 2000;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      padding-top: 20px;
-      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5);
+      padding: 0 15px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+      z-index: 10;
+      position: relative;
     }
     
-    .panel-button {
-      width: 55px;
-      height: 55px;
-      margin-bottom: 15px;
-      border-radius: 8px;
-      background-color: rgba(50, 50, 50, 0.8);
-      color: #fff;
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      cursor: pointer;
-      transition: all 0.3s ease;
+    .panel-title {
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
       display: flex;
-      flex-direction: column;
-      justify-content: center;
       align-items: center;
-      text-align: center;
-      padding: 5px;
-      font-size: 12px;
+      gap: 10px;
     }
     
-    .panel-button:hover {
-      background-color: rgba(70, 70, 70, 0.9);
-      border-color: rgba(255, 255, 255, 0.5);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-    }
-    
-    .panel-button:active {
-      transform: translateY(1px);
-      box-shadow: 0 1px 5px rgba(0, 0, 0, 0.6);
-    }
-    
-    .panel-button.active {
-      background-color: rgba(80, 120, 255, 0.8);
-      border-color: rgba(255, 255, 255, 0.7);
-    }
-    
-    .panel-button-icon {
+    .panel-icon {
       width: 24px;
       height: 24px;
-      margin-bottom: 4px;
+      stroke: white;
+      stroke-width: 2;
+      fill: none;
     }
     
-    /* Content container */
-    .content-container {
-      position: absolute;
-      top: 0;
-      left: 70px;
-      right: 0;
-      bottom: 0;
-      z-index: 1;
+    /* Panel content area */
+    .panel-content {
+      height: calc(100% - 50px);
+      width: 100%;
     }
     
     /* Make the iframes fill the content area */
@@ -92,14 +86,10 @@
     }
     
     /* Style for the update button */
-    .button-container {
-      position: fixed;
-      top: 15px;
-      left: 85px;
-      z-index: 1000;
-    }
-    
     .update-button {
+      position: absolute;
+      top: 8px;
+      right: 15px;
       padding: 8px 16px;
       background-color: rgba(30, 30, 30, 0.8);
       color: #fff;
@@ -147,50 +137,44 @@
       animation: spin 1s linear infinite;
     }
     
-    /* Content visibility control */
-    .content-section {
-      width: 100%;
+    /* Resize handle between panels */
+    .resize-handle {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 8px;
       height: 100%;
-      display: none;
+      cursor: col-resize;
+      background-color: rgba(50, 50, 50, 0.3);
+      transition: background-color 0.2s ease;
+      z-index: 20;
     }
     
-    .content-section.active {
-      display: block;
+    .resize-handle:hover {
+      background-color: rgba(80, 120, 255, 0.6);
+    }
+    
+    /* For smaller screens, adjust panel sizes */
+    @media (max-width: 1000px) {
+      .dmi-panel, .configure-panel {
+        width: 50%;
+      }
     }
   </style>
 </head>
 <body>
-  <!-- Side Panel -->
-  <div class="side-panel">
-    <button id="dmiButton" class="panel-button active" title="DMI">
-      <svg class="panel-button-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" stroke="white" stroke-width="2" fill="none"></path>
-        <polyline points="9 22 9 12 15 12 15 22" stroke="white" stroke-width="2" fill="none"></polyline>
-      </svg>
-      DMI
-    </button>
-    <button id="configureButton" class="panel-button" title="Configure">
-      <svg class="panel-button-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 15a3 3 0 100-6 3 3 0 000 6z" stroke="white" stroke-width="2" fill="none"></path>
-        <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z" stroke="white" stroke-width="2" fill="none"></path>
-      </svg>
-      Configure
-    </button>
-  </div>
-  
-  <!-- Content Container -->
-  <div class="content-container">
-    <!-- DMI Content Section -->
-    <div id="dmiContent" class="content-section active">
-      <iframe 
-        id="presentationFrame"
-        src="https://docs.google.com/presentation/d/e/2PACX-1vTFD0udq5cOvr1eAkXphCxk9avOWfDSOpWEEN_qpUWVf8OjCJ_bhvlG62uipH_caFGqv1jDeZvPcfW5/embed?start=true&loop=true&delayms=1000&rm=minimal" 
-        allowfullscreen="true" 
-        mozallowfullscreen="true" 
-        webkitallowfullscreen="true">
-      </iframe>
-      
-      <div class="button-container">
+  <!-- Main Container -->
+  <div class="main-container">
+    <!-- DMI Panel -->
+    <div class="panel dmi-panel" id="dmiPanel">
+      <div class="panel-header">
+        <div class="panel-title">
+          <svg class="panel-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" stroke="white" stroke-width="2" fill="none"></path>
+            <polyline points="9 22 9 12 15 12 15 22" stroke="white" stroke-width="2" fill="none"></polyline>
+          </svg>
+          DMI
+        </div>
         <button id="updateButton" class="update-button">
           <svg class="refresh-icon" id="refreshIcon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path d="M23 4v6h-6M1 20v-6h6"></path>
@@ -199,57 +183,47 @@
           <span id="buttonText">Update</span>
         </button>
       </div>
+      <div class="panel-content">
+        <iframe 
+          id="presentationFrame"
+          src="https://docs.google.com/presentation/d/e/2PACX-1vTFD0udq5cOvr1eAkXphCxk9avOWfDSOpWEEN_qpUWVf8OjCJ_bhvlG62uipH_caFGqv1jDeZvPcfW5/embed?start=true&loop=true&delayms=1000&rm=minimal" 
+          allowfullscreen="true" 
+          mozallowfullscreen="true" 
+          webkitallowfullscreen="true">
+        </iframe>
+      </div>
+      <div class="resize-handle" id="resizeHandle"></div>
     </div>
     
-    <!-- Configure Content Section -->
-    <div id="configureContent" class="content-section">
-      <iframe 
-        id="configureFrame"
-        src="https://script.google.com/macros/s/AKfycbz1y-fr-2s_cxUg4t4E7aU2TzQPrVsvNBtUFkVBEgMwrdy2ZOZe3rld6dCN8jlTKH7s/exec" 
-        allowfullscreen="true" 
-        mozallowfullscreen="true" 
-        webkitallowfullscreen="true">
-      </iframe>
+    <!-- Configure Panel -->
+    <div class="panel configure-panel" id="configurePanel">
+      <div class="panel-header">
+        <div class="panel-title">
+          <svg class="panel-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 15a3 3 0 100-6 3 3 0 000 6z" stroke="white" stroke-width="2" fill="none"></path>
+            <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z" stroke="white" stroke-width="2" fill="none"></path>
+          </svg>
+          Configure
+        </div>
+      </div>
+      <div class="panel-content">
+        <iframe 
+          id="configureFrame"
+          src="https://script.google.com/macros/s/AKfycbz1y-fr-2s_cxUg4t4E7aU2TzQPrVsvNBtUFkVBEgMwrdy2ZOZe3rld6dCN8jlTKH7s/exec" 
+          allowfullscreen="true" 
+          mozallowfullscreen="true" 
+          webkitallowfullscreen="true">
+        </iframe>
+      </div>
     </div>
   </div>
   
   <script>
-    // Get reference to buttons and content sections
-    const dmiButton = document.getElementById("dmiButton");
-    const configureButton = document.getElementById("configureButton");
-    const dmiContent = document.getElementById("dmiContent");
-    const configureContent = document.getElementById("configureContent");
-    
     // Get reference to the update button, icon, text span, and iframe
     const updateButton = document.getElementById("updateButton");
     const refreshIcon = document.getElementById("refreshIcon");
     const buttonText = document.getElementById("buttonText");
     const presentationFrame = document.getElementById("presentationFrame");
-    
-    // Function to set active content
-    function setActiveContent(contentId) {
-      // Hide all content sections and deactivate all buttons
-      document.querySelectorAll('.content-section').forEach(section => {
-        section.classList.remove('active');
-      });
-      
-      document.querySelectorAll('.panel-button').forEach(button => {
-        button.classList.remove('active');
-      });
-      
-      // Show selected content and activate corresponding button
-      document.getElementById(contentId + 'Content').classList.add('active');
-      document.getElementById(contentId + 'Button').classList.add('active');
-    }
-    
-    // Add click event listeners to side panel buttons
-    dmiButton.addEventListener("click", function() {
-      setActiveContent('dmi');
-    });
-    
-    configureButton.addEventListener("click", function() {
-      setActiveContent('configure');
-    });
     
     // Add click event listener to the update button
     updateButton.addEventListener("click", function() {
@@ -265,6 +239,49 @@
         refreshIcon.classList.remove("spinning");
         buttonText.textContent = "Update";
       }, 1500);
+    });
+    
+    // Resizable panel implementation
+    const dmiPanel = document.getElementById("dmiPanel");
+    const configurePanel = document.getElementById("configurePanel");
+    const resizeHandle = document.getElementById("resizeHandle");
+    
+    let isResizing = false;
+    
+    resizeHandle.addEventListener("mousedown", (e) => {
+      isResizing = true;
+      document.body.style.cursor = "col-resize";
+      e.preventDefault();
+    });
+    
+    document.addEventListener("mousemove", (e) => {
+      if (!isResizing) return;
+      
+      const containerWidth = document.querySelector(".main-container").offsetWidth;
+      const mousePosition = e.clientX;
+      const percentage = (mousePosition / containerWidth) * 100;
+      
+      // Limit the minimum size of panels
+      if (percentage > 20 && percentage < 80) {
+        dmiPanel.style.width = `${percentage}%`;
+        configurePanel.style.width = `${100 - percentage}%`;
+      }
+    });
+    
+    document.addEventListener("mouseup", () => {
+      isResizing = false;
+      document.body.style.cursor = "default";
+    });
+    
+    // Handle window resize
+    window.addEventListener("resize", () => {
+      // Ensure panels maintain their relative sizes on window resize
+      const totalWidth = document.querySelector(".main-container").offsetWidth;
+      const dmiWidth = dmiPanel.offsetWidth;
+      const percentage = (dmiWidth / totalWidth) * 100;
+      
+      dmiPanel.style.width = `${percentage}%`;
+      configurePanel.style.width = `${100 - percentage}%`;
     });
   </script>
 </body>
